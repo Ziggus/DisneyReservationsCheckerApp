@@ -12,7 +12,7 @@ months = {'January': 0, 'February': 1, 'March': 2, 'April': 3, 'May': 4, 'June':
 reqDate = (6)
 reqMonth = (11)
 reqYear = (2019)
-reqTime = ("20:00") #10PM
+reqTime = ("7:00pm")
 fullDate = (", November 6, 2019")
 weekDay = parser.parse(fullDate).strftime("%A")
 fullDate = (weekDay + fullDate) # converts to disney friendly format to be clicked
@@ -39,16 +39,15 @@ print("At current Month")
 driver.find_element_by_xpath('//*[@title="%s"]' % fullDate).click() #working
 print("Clicked")
 
-
-
 # need to add function for time
 #need to click arrow key first
 
 driver.find_element_by_class_name("select-toggle").click()
 time.sleep(5)
-driver.find_element_css_selector('ol > li[aria-label="7:00pm"]').click() #clicks specicic time
-# add function for party size
+driver.find_element_by_css_selector ('ol > li[aria-label="%s"]' % reqTime).click() #works
 
+# add function for party size
+time.sleep(25)
 # retrieve results
 
 # loop

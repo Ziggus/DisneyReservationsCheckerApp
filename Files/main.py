@@ -46,8 +46,7 @@ print("Clicked")
 
 driver.find_element_by_class_name("select-toggle").click()
 time.sleep(5)
-driver.find_element_by_id("diningAvailabilityForm-searchTime-21").click() #clicks specicic time
-time.sleep(15)
+driver.find_element_css_selector('ol > li[aria-label="7:00pm"]').click() #clicks specicic time
 # add function for party size
 
 # retrieve results

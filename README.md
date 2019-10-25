@@ -6,15 +6,14 @@ Python
 Selenium
 Twilio
 
-General process:
+First part:
 
+Loops through all available reservation dates (180 from today) and checks for all reservations with the set party and time (dinner/breakfast)
 
-Start loopOpen Disney reservation site to the desired restaurant
-Enter date and time, hit enter
-Check for avaialble time
-Enter another time or date if needed
+Combiles all available reservations onto a list that updates regularly and posts onto github.io site.
 
-if there is an available reservation text my number via Twilio and pause for 300 seconds (gives time for me to remote into the PC to make the reservation before it dissapears)
+Second part:
 
-Pause 30 seconds
-end loop
+Allows user to enter set date, time and party size and loops that date until there is an opening then texts the user with the opening date and time using twilio.
+
+Currently working on Ohana.

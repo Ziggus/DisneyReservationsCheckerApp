@@ -4,9 +4,16 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from dateutil import parser
 import calendar
+import os
 
-# driver = webdriver.Chrome(executable_path=r'C:\Users\Brandon\AppData\Local\Programs\Python\Python38-32\chromedriver.exe')
-driver = webdriver.Chrome(executable_path=r'C:\Users\Jimmy Bowden\AppData\Local\Programs\Python\Python37-32\chromedriver.exe')
+userName = os.getlogin()
+# changed to remove the need to comment/uncomment depending on user
+if userName == "Brandon":
+    print("Current user "+userName)
+    driver = webdriver.Chrome(executable_path=r'C:\Users\Brandon\AppData\Local\Programs\Python\Python38-32\chromedriver.exe') 
+if userName == "Jimmy Bowden":
+    print("Current user "+userName)  
+    driver = webdriver.Chrome(executable_path=r'C:\Users\Jimmy Bowden\AppData\Local\Programs\Python\Python37-32\chromedriver.exe')
 
 ohanaLink = ("https://disneyworld.disney.go.com/dining/polynesian-resort/ohana/")
 months = {'January': 0, 'February': 1, 'March': 2, 'April': 3, 'May': 4, 'June': 5, 'July': 6, 'August': 7, 'September': 8, 'October': 9, 'November': 10, 'December': 11}

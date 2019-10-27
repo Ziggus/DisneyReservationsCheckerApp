@@ -4,8 +4,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from dateutil import parser
 import calendar
-import os
 
+import os
 userName = os.getlogin()
 # changed to remove the need to comment/uncomment depending on user
 if userName == "Brandon":

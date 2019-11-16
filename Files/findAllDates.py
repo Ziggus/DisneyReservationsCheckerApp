@@ -12,9 +12,6 @@ try: # finds ChromeDriver based on user
     if userName == "Brandon":
         print("Current user "+userName)
         driver = webdriver.Chrome(executable_path=r'C:\Users\Brandon\AppData\Local\Programs\Python\Python38-32\chromedriver.exe') 
-    if userName == "Jimmy Bowden":
-        print("Current user "+userName)  
-        driver = webdriver.Chrome(executable_path=r'C:\Users\Jimmy Bowden\AppData\Local\Programs\Python\Python37-32\chromedriver.exe')
 except:
     print("An error occured identifying ChromeDriver.")
 
@@ -46,7 +43,7 @@ try: # pick the party size
 except:
     print("An error occured when picking the party size.")
 
-x = 3
+x = 0
 while True:
     currDate = (today + timedelta(days=x))
     currWeekDay = currDate.strftime("%A")
@@ -100,4 +97,3 @@ while True:
     time.sleep(3)
 driver.quit()
 
-#timesContainer > div.ctaAvailableTimesContainer > div > a > span > span > span

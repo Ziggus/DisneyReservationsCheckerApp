@@ -12,17 +12,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 import os
-
-'''
-Todo:
-Add error checking for chrome version and webdriver location based on user
-Remove time.sleeps and have the program wait for elements to load using a loop 
-expand on the notifications of an openin
-finally build into executable with py.exe
-'''
-
 def exitNow():
-    quit()
+    os._exit(1) # updated this to remove quit() with caused exception error
 # -------------------------------------------------------------------------------- start browser --------------------------------------------------------------------------------
 def startScript():
     root.withdraw() # hides menu so it runs in the background
@@ -120,25 +111,69 @@ def startScript():
         time.sleep(int(loopTimeInput.get())-2.5)
     driver.quit()
 # -------------------------------------------------------------------------------- end browser --------------------------------------------------------------------------------
-
+# -------------------------------------------------------------------------------- Begin validating inputs --------------------------------------------------------------------------------
+def validateInputs():
+    pSizeBool = 0
+    chosenTimeBool = 0
+    choseDateBool = 0
+    loopTimeBool = 0
+    # verify party size
+    if int(partySizeInput.get()) >= 2: 
+        if int(partySizeInput.get()) <= 49:
+            pSizeBool = 1
+    # verify time
+    if (chosenTimeInput.get()).lower() in ["breakfast","dinner"]: 
+        chosenTimeBool = 1
+    # verify data
+    try:
+        tempChosenDate = datetime.datetime.strptime(chosenDateInput.get(), '%m/%d/%Y')
+    except:
+        messagebox.showinfo("Alert!", "The entered date format does not match what is expected. Please reenter the data using the format 'MM/DD/YYYY'")
+        return 
+    tempTodayVar = datetime.datetime.today()
+    if (tempChosenDate > (tempTodayVar + timedelta(days=2))):
+        if (tempChosenDate <= (tempTodayVar + timedelta(days=180))):
+            choseDateBool = 1
+    # verify loop time
+    if (int(loopTimeInput.get()) > 14):
+        loopTimeBool = 1
+    if (pSizeBool == 1):
+        if (chosenTimeBool == 1):
+            if (choseDateBool == 1):
+                if (loopTimeBool == 1):
+                    startScript()
+                else:
+                    messagebox.showinfo("Alert!", "There is an issue with the chosen loop time, the value must be a number greater than 15. Please input a different number and try again.")
+                    return
+            else:
+                messagebox.showinfo("Alert!", "There is an issue with the chosen date, Disney only allows reservations up to 180 days from today's date and the script can only check dates more then 2 days ahead.")
+                return
+        else:
+            messagebox.showinfo("Alert!", "There is an issue with the chosen time, currently the only values allowed are Dinner or Breakfast - support for other times will be added later")
+            return
+    else:
+        messagebox.showinfo("Alert!", "There is an issue with the party size, Disney only allows parties between 2 and 49 people. Please try again.")
+        return
+    # if all bools true then call startScript 
+# -------------------------------------------------------------------------------- end validating inputs --------------------------------------------------------------------------------
 # -------------------------------------------------------------------------------- begin GUI --------------------------------------------------------------------------------
 root = Tk()
-
-labelName = Label(root, text="Disney Reservation Checker")
-enterButton = Button(root, text=" Start " ,bg="yellow",fg="black", command=startScript)
+root.title('Disney Reservation Checker')
+labelName = Label(root, text="Ohana Reservation Checker")
+enterButton = Button(root, text=" Start " ,bg="yellow",fg="black", command=validateInputs) # change to validate first and startScript second
 exitButton = Button(root, text= " Exit  " ,bg ="red",fg="black", command=exitNow)
 partySizeLabel = Label(root, text="Enter a party size between 2 and 49")
 partySizeInput = Entry(root)
-partySizeInput.insert(10, "4")
+partySizeInput.insert(10, "")
 chosenTimeLabel = Label(root, text="Breakfast or Dinner?")
 chosenTimeInput = Entry(root)
-chosenTimeInput.insert(10, "Dinner")
+chosenTimeInput.insert(10, "")
 chosenDateLabel = Label(root, text="Please enter a date ex: 04/25/2020")
 chosenDateInput = Entry(root)
-chosenDateInput.insert(10, "04/13/2020")
+chosenDateInput.insert(10, "")
 loopTime = Label(root, text="How often should we check? (seconds)")
 loopTimeInput = Entry(root)
-loopTimeInput.insert(10, "30")
+loopTimeInput.insert(10, "")
 
 partySizeLabel.grid(row=2,column=0,sticky=E)
 partySizeInput.grid(row=2,column=1,sticky=E)
@@ -153,6 +188,15 @@ labelName.grid(row=0,columnspan=2)
 
 enterButton.grid(row=6,column=0,sticky=E)
 exitButton.grid(row=6,column=1,sticky=W)
+
+# centers screen
+root.withdraw()
+root.update_idletasks()  
+x = (root.winfo_screenwidth() - root.winfo_reqwidth()) / 2
+y = (root.winfo_screenheight() - root.winfo_reqheight()) / 2
+root.geometry("+%d+%d" % (x, y))
+root.deiconify()
+# centers screen
 
 root.mainloop()
 # -------------------------------------------------------------------------------- end GUI --------------------------------------------------------------------------------

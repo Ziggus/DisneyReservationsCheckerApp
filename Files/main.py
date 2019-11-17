@@ -27,12 +27,16 @@ def startScript():
             options.add_argument("disable-gpu")
             driver = webdriver.Chrome(executable_path=r'C:\Users\Brandon\AppData\Local\Programs\Python\Python38-32\chromedriver.exe', chrome_options=options) 
     except:
-        print("An error occured identifying ChromeDriver.")
+        driver.quit()
+        scriptError()
+        return
     try: # go to the URL
         driver.get(ohanaLink)
         WebDriverWait(driver, 10).until(lambda driver: driver.execute_script('return document.readyState') == 'complete')
     except:
-        print('An error occured when picking party size and time.')
+        driver.quit()
+        scriptError()
+        return
     try: #pick the time
         reqTime = str(chosenTimeInput.get()).lower()
         driver.find_element_by_class_name("select-toggle").click()
@@ -40,7 +44,9 @@ def startScript():
         driver.find_element_by_css_selector ('ol > li[aria-label="%s"]' % reqTime).click()
         time.sleep(0.25)
     except:
-        print("An error occured when picking the time.")
+        driver.quit()
+        scriptError()
+        return
     try: # pick the party size
         partySize = str(partySizeInput.get())
         driver.find_element_by_xpath('//*[@aria-owns="partySize-dropdown-list"]').click()
@@ -48,7 +54,9 @@ def startScript():
         driver.find_element_by_css_selector ('ol > li[data-display="%s"]' % partySize).click()
         time.sleep(0.25)
     except:
-        print("An error occured when picking the party size.")
+        driver.quit()
+        scriptError()
+        return
     try:
         inputMonth = int(chosenDateInput.get().split("/")[0])
         inputDay = int(chosenDateInput.get().split("/")[1])
@@ -65,7 +73,9 @@ def startScript():
             time.sleep(0.25)
             siteMonth = driver.find_element_by_class_name("ui-datepicker-month").get_attribute("innerHTML")
         except:
-            print("There was an determining the site month.")
+            driver.quit()
+            scriptError()
+            return
         try: # logic for if the month has changed
             while siteMonth != currMonth:
                 driver.find_element_by_class_name("ui-icon-circle-triangle-e").click() # Goes to next month
@@ -73,22 +83,30 @@ def startScript():
                 siteMonth = driver.find_element_by_class_name("ui-datepicker-month").get_attribute("innerHTML")
                 time.sleep(0.25)
         except:
-            print("We encountered an error selecting the correct month.")
+            driver.quit()
+            scriptError()
+            return
         try: # choses date from open date menu - the page does not refresh so we only need to open this once
             time.sleep(1.5)
             driver.find_element_by_xpath('//*[@aria-label="%s"]' % fullDate).click() # click date
             time.sleep(0.25)
         except:
-            print("An error occured clicking the date")
+            driver.quit()
+            scriptError()
+            return
     except:
-        print("An error occured when selecting the month")
+        driver.quit()
+        scriptError()
+        return
     while True: # main loop 
         try: # clicks search button
             time.sleep(2.5)
             driver.find_element_by_id("dineAvailSearchButton").click() # Click search times button
             time.sleep(7.5) # change this to wait for loading element to dissapear
         except:
-            print("We encountered a problem selecting the day") 
+            driver.quit()
+            scriptError()
+            return 
         try: # case no dates
             if driver.find_element_by_class_name("ctaNoAvailableTimesContainer"):
                 time.sleep(0.05)
@@ -99,7 +117,7 @@ def startScript():
                 availbility = driver.find_element_by_class_name("pillLink").text
                 popUpMsg = ("There is an opening at %s on %s." % (availbility, fullDate))
                 root.lift()
-                messagebox.showinfo("Alert!", popUpMsg)
+                messagebox.showinfo("There is an opening!", popUpMsg)
                 MsgBox = messagebox.askquestion('Exit Application','Are you sure you want to exit the application',icon = 'warning')
                 if MsgBox == 'yes':
                     driver.quit()
@@ -156,6 +174,11 @@ def validateInputs():
         return
     # if all bools true then call startScript 
 # -------------------------------------------------------------------------------- end validating inputs --------------------------------------------------------------------------------
+def scriptError():
+    print("An error occured when picking the time.")
+    messagebox.showinfo("Alert!", "There was an error with the script. Hit 'Start' to try again.")
+    root.deiconify()
+    return
 # -------------------------------------------------------------------------------- begin GUI --------------------------------------------------------------------------------
 root = Tk()
 root.title('Disney Reservation Checker')
@@ -164,16 +187,16 @@ enterButton = Button(root, text=" Start " ,bg="yellow",fg="black", command=valid
 exitButton = Button(root, text= " Exit  " ,bg ="red",fg="black", command=exitNow)
 partySizeLabel = Label(root, text="Enter a party size between 2 and 49")
 partySizeInput = Entry(root)
-partySizeInput.insert(10, "")
+partySizeInput.insert(10, "4")
 chosenTimeLabel = Label(root, text="Breakfast or Dinner?")
 chosenTimeInput = Entry(root)
-chosenTimeInput.insert(10, "")
-chosenDateLabel = Label(root, text="Please enter a date ex: 04/25/2020")
+chosenTimeInput.insert(10, "Dinner")
+chosenDateLabel = Label(root, text="Please enter a date ex: MM/DD/YYYY")
 chosenDateInput = Entry(root)
-chosenDateInput.insert(10, "")
+chosenDateInput.insert(10, "04/13/2020")
 loopTime = Label(root, text="How often should we check? (seconds)")
 loopTimeInput = Entry(root)
-loopTimeInput.insert(10, "")
+loopTimeInput.insert(10, "30")
 
 partySizeLabel.grid(row=2,column=0,sticky=E)
 partySizeInput.grid(row=2,column=1,sticky=E)

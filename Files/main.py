@@ -12,6 +12,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 import os
+
+from twilio.rest import Client
+
 def exitNow():
     os._exit(1) # updated this to remove quit() with caused exception error
 # -------------------------------------------------------------------------------- start browser --------------------------------------------------------------------------------
@@ -106,6 +109,18 @@ def startScript():
                     root.destroy()
                 else:
                     tk.messagebox.showinfo('Return','You will now return to the application screen')
+
+                account_sid = 'AC8e14b1e892a9456d0a2656ac0ca8634e'
+                auth_token = '003436af2c87166e199a44c46a299403'
+                client = Client(account_sid, auth_token)
+
+                message = client.messages \
+                .create(
+                     body=popUpMsg,
+                     from_='+12565008428',
+                     to='+16039735334'
+                 )
+                print(message.sid)
         except:
             time.sleep(0.05)
         time.sleep(int(loopTimeInput.get())-2.5)

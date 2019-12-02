@@ -129,7 +129,7 @@ def startScript():
                     tk.messagebox.showinfo('Return','You will now return to the application screen')
 
                 account_sid = 'AC8e14b1e892a9456d0a2656ac0ca8634e'
-                auth_token = '003436af2c87166e199a44c46a299403'
+                auth_token = '8aef4377ef6a5d34b6a48806bc592262'
                 client = Client(account_sid, auth_token)
 
                 message = client.messages \

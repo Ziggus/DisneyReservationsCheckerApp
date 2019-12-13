@@ -16,7 +16,7 @@ import os
 from twilio.rest import Client
 
 def exitNow():
-    os._exit(1) # updated this to remove quit() with caused exception error
+    os._exit(1) # updated this to remove quit() which caused exception error
 # -------------------------------------------------------------------------------- start browser --------------------------------------------------------------------------------
 def startScript():
     root.withdraw() # hides menu so it runs in the background
@@ -127,9 +127,9 @@ def startScript():
                     root.destroy()
                 else:
                     tk.messagebox.showinfo('Return','You will now return to the application screen')
-
-                account_sid = 'AC8e14b1e892a9456d0a2656ac0ca8634e'
-                auth_token = '003436af2c87166e199a44c46a299403'
+                # SMS functionality with Twilio (unfortunately trial account can only sent messages to my number)
+                account_sid = 'ACc13f2dc6b4bfc25c7b1633b156e943b1'
+                auth_token = '773fb716936fe361696b9d25a85bce4c'
                 client = Client(account_sid, auth_token)
 
                 message = client.messages \
